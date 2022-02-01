@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schema/transmutation-definition.json",
+  "definition": [
+    {
+      "class": "class1",
+      "match": "<.+>"
+    }
+  ]
+}
