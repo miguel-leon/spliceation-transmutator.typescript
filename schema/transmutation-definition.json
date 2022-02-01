@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://github.com/miguel-leon/spliceation-transmutator.typescript",
+  "title": "Transmutation",
+  "description": "Transmutation clauses definition",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri"
+    },
+    "definition": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/clause"
+      }
+    }
+  },
+  "required": [],
+  "definitions": {
+    "clause": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["class", "match"],
+      "properties": {
+        "class": {
+          "type": "string"
+        },
+        "match": {
+          "oneOf": [
+            {
+              "type": "string",
+              "format": "regex"
+            }, {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "regex"
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

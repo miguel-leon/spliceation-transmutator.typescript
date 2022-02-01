@@ -4,10 +4,14 @@ specifiers:
   '@types/jest': ^27.4.0
   '@typescript-eslint/eslint-plugin': ^5.9.0
   '@typescript-eslint/parser': ^5.9.0
+  commonly.typescript: ^0.1.2
   eslint: ^8.6.0
   jest: ^27.4.7
   ts-jest: ^27.1.2
   typescript: ^4.5.4
+
+dependencies:
+  commonly.typescript: link:../commonly.typescript/dist
 
 devDependencies:
   '@types/jest': 27.4.0
