@@ -9,7 +9,7 @@ export namespace Transmutation {
 		class: string;
 		match: RegExp;
 		multiline?: boolean;
-		recursion?: boolean | Clause[];
+		recursion?: boolean | Definition;
 	}
 
 	// TODO: remove any
