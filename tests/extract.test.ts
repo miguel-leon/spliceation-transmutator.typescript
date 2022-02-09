@@ -55,4 +55,24 @@ describe('Extract function', () => {
 			class: 'root'
 		});
 	});
+
+	test('splits the resulting segment into multiple when matching multiline', () => {
+		const definition: Transmutation.Definition = [{
+			match: /a\sa/gm,
+			class: 'a'
+		}];
+		const content = 'bbba\nabbb';
+
+		const result = extract(content, definition);
+
+		expect(result).toEqual({
+			segments: [
+				'bbb',
+				{ segments: ['a'], class: 'a' },
+				'\n',
+				{ segments: ['a'], class: 'a' },
+				'bbb'
+			]
+		});
+	});
 });

@@ -8,7 +8,6 @@ export namespace Transmutation {
 	export interface Clause {
 		class: string;
 		match: RegExp;
-		multiline?: boolean;
 		recursion?: boolean | Definition;
 	}
 

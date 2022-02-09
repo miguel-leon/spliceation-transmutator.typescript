@@ -1,5 +1,6 @@
 import { Transmutation } from './transmutation';
 import { prune } from 'commonly.typescript/objects';
+import { intersperse } from 'commonly.typescript/arrays';
 
 
 type Segments = (string | Extraction)[];
@@ -14,36 +15,59 @@ export type ExtractOptions = Partial<{
 	rootClass: string;
 }>
 
-export function extract(content: string, definition: Transmutation.Definition, options?: ExtractOptions): Extraction {
-	options = { splitOnLineBreaks: true, ...options };
+export function extract(
+	content: string,
+	definition: Transmutation.Definition,
+	{ splitOnLineBreaks = true, rootClass }: ExtractOptions = {}
+): Extraction {
+	return {
+		segments: sweep(definition, [content]),
+		...prune({ class: rootClass })
+	};
 
-	return sweep([content], options.rootClass);
-
-	function sweep(segments: Segments, _class?: string): Extraction {
-		definition.forEach(clause => {
-			segments = segments.flatMap(segment => typeof segment === 'string' ? applyClause(segment, clause) : segment);
-		});
-
-		return {
-			segments,
-			...prune({ class: _class })
-		};
+	function sweep(definition: Transmutation.Definition, segments: Segments): Segments {
+		return definition.reduce(
+			(segments, clause) =>
+				segments.flatMap(segment => typeof segment === 'string' ? applyClause(segment, clause) : segment),
+			segments
+		);
 	}
 
-	function applyClause(segment: string, clause: Transmutation.Clause): Extraction['segments'] {
+	function applyClause(segment: string, clause: Transmutation.Clause): Segments {
 		return [...segmentation()];
 
 		function* segmentation(): Generator<Segments[number]> {
 			let prev = 0;
 			for (const { 0: match, index } of segment.matchAll(clause.match)) {
 				if (prev < index!) yield segment.substring(prev, index);
-				yield {
-					segments: [match],
+
+				const segments: Segments = [match];
+				// if recursive, segments = sweep
+
+				const segmentSplits = (
+					clause.match.multiline && splitOnLineBreaks ?
+						splitLineBreaks(segments) :
+						[segments]
+				).map(segments => ({
+					segments,
 					class: clause.class
-				};
+				}));
+
+				for (const extraction of intersperse('\n')(segmentSplits)) {
+					yield extraction;
+				}
+
 				prev = index! + match.length;
 			}
 			if (prev < segment.length) yield segment.substring(prev);
 		}
+	}
+
+	function splitLineBreaks(segments: Segments): Segments[] {
+		return segments.flatMap(
+			segment => typeof segment === 'string' ?
+				segment.split('\n').map(split => [split] as Segments) :
+				[segment]
+		);
 	}
 }
