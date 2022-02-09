@@ -41,8 +41,15 @@ export function extract(
 			for (const { 0: match, index } of segment.matchAll(clause.match)) {
 				if (prev < index!) yield segment.substring(prev, index);
 
-				const segments: Segments = [match];
-				// if recursive, segments = sweep
+				const segments: Segments =
+					clause.recursion ?
+						sweep(
+							Array.isArray(clause.recursion) ?
+								clause.recursion :
+								definition,
+							[match]
+						) :
+						[match];
 
 				const segmentSplits = (
 					clause.match.multiline && splitOnLineBreaks ?

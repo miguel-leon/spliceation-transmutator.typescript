@@ -75,4 +75,69 @@ describe('Extract function', () => {
 			]
 		});
 	});
+
+	test('does recursive specification', () => {
+		const definition: Transmutation.Definition = [{
+			match: /a\S*a/g,
+			class: 'a',
+			recursion: [{
+				match: /b.*?b/g,
+				class: 'b',
+				recursion: [{
+					match: /c+/g,
+					class: 'c'
+				}]
+			}]
+		}];
+		const content = 'aabccbaa aabcbcbbaa';
+
+		const result = extract(content, definition);
+
+		expect(result).toEqual({
+			segments: [
+				{
+					class: 'a',
+					segments: [
+						'aa',
+						{
+							class: 'b',
+							segments: [
+								'b',
+								{
+									class: 'c',
+									segments: ['cc']
+								},
+								'b'
+							]
+						},
+						'aa'
+					]
+				},
+				' ',
+				{
+					class: 'a',
+					segments: [
+						'aa',
+						{
+							class: 'b',
+							segments: [
+								'b',
+								{
+									class: 'c',
+									segments: ['c']
+								},
+								'b'
+							]
+						},
+						'c',
+						{
+							class: 'b',
+							segments: ['bb']
+						},
+						'aa'
+					]
+				}
+			]
+		});
+	});
 });
