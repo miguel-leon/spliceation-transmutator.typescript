@@ -141,7 +141,7 @@ describe('Extract function', () => {
 		});
 	});
 
-	test('does recursive specification with line breaks at top level', () => {
+	test('does recursive specification with line breaks at top level clause', () => {
 		const definition: Transmutation.Definition = [{
 			match: /`([^`]*?({[\s\S]*?`[\s\S]*?}[\s\S]*?)*)*`/gm,
 			class: 's',
@@ -151,7 +151,7 @@ describe('Extract function', () => {
 				recursion: true
 			}]
 		}];
-		const content = '`aaa\n{`bbb`{`ccc`}}{`ddd`}\naaa`\n';
+		const content = '`aa\n\na\n{`bbb`{`ccc`}}{`ddd`}\naaa`\n';
 
 		const result = extract(content, definition);
 
@@ -159,7 +159,12 @@ describe('Extract function', () => {
 			segments: [
 				{
 					class: 's',
-					segments: ['`aaa']
+					segments: ['`aa']
+				},
+				'\n\n',
+				{
+					class: 's',
+					segments: ['a']
 				},
 				'\n',
 				{
@@ -171,12 +176,12 @@ describe('Extract function', () => {
 								'{',
 								{
 									class: 's',
-									segments: [`bbb`]
+									segments: ['`bbb`']
 								},
 								'{',
 								{
 									class: 's',
-									segments: [`ccc`]
+									segments: ['`ccc`']
 								},
 								'}}'
 							]
@@ -187,7 +192,7 @@ describe('Extract function', () => {
 								'{',
 								{
 									class: 's',
-									segments: [`ddd`]
+									segments: ['`ddd`']
 								},
 								'}'
 							]

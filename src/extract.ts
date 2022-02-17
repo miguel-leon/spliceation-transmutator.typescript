@@ -1,6 +1,5 @@
 import { Transmutation } from './transmutation';
 import { prune } from 'commonly.typescript/objects';
-import { intersperse } from 'commonly.typescript/arrays';
 
 
 type Segments = (string | Extraction)[];
@@ -51,30 +50,47 @@ export function extract(
 						) :
 						[match];
 
-				const segmentSplits = (
-					clause.match.multiline && splitOnLineBreaks ?
-						splitLineBreaks(segments) :
-						[segments]
-				).map(segments => ({
-					segments,
-					class: clause.class
-				}));
+				let last = 0, i = 0;
+				do {
+					if (typeof segments[i] === 'string') {
+						if (clause.match.multiline && splitOnLineBreaks) {
+							const splits = (segments[i] as string).split(/(\n+)/);
 
-				for (const extraction of intersperse('\n')(segmentSplits)) {
-					yield extraction;
+							if (splits.length > 1) {
+								yield wrap([...segments.slice(last, i), ...[splits[0]].filter(Boolean)]);
+
+								let j = 1;
+								const n = splits.length - 2;
+								while (j < n) {
+									yield splits[j++];
+									yield wrap([splits[j++]]);
+								}
+								yield splits[j++];
+								if (splits[j]) {
+									segments[i] = splits[j];
+									last = i;
+								} else {
+									last = i + 1;
+								}
+							}
+						}
+					}
+				} while (++i < segments.length);
+
+				if (last < segments.length) {
+					yield wrap(segments.slice(last));
 				}
 
 				prev = index! + match.length;
 			}
 			if (prev < segment.length) yield segment.substring(prev);
-		}
-	}
 
-	function splitLineBreaks(segments: Segments): Segments[] {
-		return segments.flatMap(
-			segment => typeof segment === 'string' ?
-				segment.split('\n').map(split => [split] as Segments) :
-				[segment]
-		);
+			function wrap(segments: Segments) {
+				return {
+					segments,
+					class: clause.class
+				};
+			}
+		}
 	}
 }
