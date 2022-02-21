@@ -141,71 +141,206 @@ describe('Extract function', () => {
 		});
 	});
 
-	test('does recursive specification with line breaks at top level clause', () => {
+	describe('does recursive specification with line breaks', () => {
 		const definition: Transmutation.Definition = [{
-			match: /`([^`]*?({[\s\S]*?`[\s\S]*?}[\s\S]*?)*)*`/gm,
+			match: /`({({[^}]*}|[^}])*}|[^`])*`/gm,
 			class: 's',
 			recursion: [{
-				match: /{([^}]*?({[\s\S]*?}[\s\S]*?)*)*}/gm,
+				match: /{({[^}]*}|`({[^}]*}|[^`])*`|[^}])*}/gm,
 				class: 'i',
 				recursion: true
 			}]
 		}];
-		const content = '`aa\n\na\n{`bbb`{`ccc`}}{`ddd`}\naaa`\n';
 
-		const result = extract(content, definition);
+		test('at top level clause', () => {
+			const content = '`aa\n\na\n{`bbb`{`ccc`}}{`ddd`}\naaa`\n';
 
-		expect(result).toEqual({
-			segments: [
-				{
-					class: 's',
-					segments: ['`aa']
-				},
-				'\n\n',
-				{
-					class: 's',
-					segments: ['a']
-				},
-				'\n',
-				{
-					class: 's',
-					segments: [
-						{
+			const result = extract(content, definition);
+
+			expect(result).toEqual({
+				segments: [
+					{
+						class: 's',
+						segments: ['`aa']
+					},
+					'\n\n',
+					{
+						class: 's',
+						segments: ['a']
+					},
+					'\n',
+					{
+						class: 's',
+						segments: [
+							{
+								class: 'i',
+								segments: [
+									'{',
+									{
+										class: 's',
+										segments: ['`bbb`']
+									},
+									'{',
+									{
+										class: 's',
+										segments: ['`ccc`']
+									},
+									'}}'
+								]
+							},
+							{
+								class: 'i',
+								segments: [
+									'{',
+									{
+										class: 's',
+										segments: ['`ddd`']
+									},
+									'}'
+								]
+							}
+						]
+					},
+					'\n',
+					{
+						class: 's',
+						segments: ['aaa`']
+					},
+					'\n'
+				]
+			});
+		});
+
+		test('at any level clause', () => {
+			const content = '`a\n{\n`b\nb`\n}\n{`{\n`c\nc`\n}`}\na`';
+
+			const result = extract(content, definition);
+
+			expect(result).toEqual({
+				segments: [
+					{
+						class: 's',
+						segments: ['`a']
+					},
+					'\n',
+					{
+						class: 's',
+						segments: [{
+							class: 'i',
+							segments: ['{']
+						}]
+					},
+					'\n',
+					{
+						class: 's',
+						segments: [{
+							class: 'i',
+							segments: [{
+								class: 's',
+								segments: ['`b']
+							}]
+						}]
+					},
+					'\n',
+					{
+						class: 's',
+						segments: [{
+							class: 'i',
+							segments: [{
+								class: 's',
+								segments: ['b`']
+							}]
+						}]
+					},
+					'\n',
+					{
+						class: 's',
+						segments: [{
+							class: 'i',
+							segments: ['}']
+						}]
+					},
+					'\n',
+					{
+						class: 's',
+						segments: [{
 							class: 'i',
 							segments: [
 								'{',
 								{
 									class: 's',
-									segments: ['`bbb`']
-								},
-								'{',
-								{
-									class: 's',
-									segments: ['`ccc`']
-								},
-								'}}'
+									segments: [
+										'`',
+										{
+											class: 'i',
+											segments: ['{']
+										}
+									]
+								}
 							]
-						},
-						{
+						}]
+					},
+					'\n',
+					{
+						class: 's',
+						segments: [{
+							class: 'i',
+							segments: [{
+								class: 's',
+								segments: [{
+									class: 'i',
+									segments: [{
+										class: 's',
+										segments: ['`c']
+									}]
+								}]
+							}]
+						}]
+					},
+					'\n',
+					{
+						class: 's',
+						segments: [{
+							class: 'i',
+							segments: [{
+								class: 's',
+								segments: [{
+									class: 'i',
+									segments: [{
+										class: 's',
+										segments: ['c`']
+									}]
+								}]
+							}]
+						}]
+					},
+					'\n',
+					{
+						class: 's',
+						segments: [{
 							class: 'i',
 							segments: [
-								'{',
 								{
 									class: 's',
-									segments: ['`ddd`']
+									segments: [
+										{
+											class: 'i',
+											segments: ['}']
+										},
+										'`'
+									]
 								},
 								'}'
 							]
-						}
-					]
-				},
-				'\n',
-				{
-					class: 's',
-					segments: ['aaa`']
-				},
-				'\n'
-			]
+						}]
+					},
+					'\n',
+					{
+						class: 's',
+						segments: ['a`']
+					}
+				]
+			});
 		});
 	});
 });
