@@ -1,5 +1,5 @@
-import { Transmutation } from './transmutation';
 import { prune } from 'commonly.typescript/objects';
+import { Transmutation } from './transmutation';
 
 
 type Segments = (string | Extraction)[];
