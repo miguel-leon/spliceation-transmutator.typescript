@@ -51,32 +51,30 @@ export function extract(
 						[match];
 
 				let last = 0, i = 0;
-				do {
-					if (typeof segments[i] === 'string') {
-						if (clause.match.multiline && splitOnLineBreaks) {
-							const splits = (segments[i] as string).split(/(\n+)/);
+				if (clause.match.multiline && splitOnLineBreaks) {
+					do {
+						if (typeof segments[i] !== 'string') continue;
 
-							if (splits.length > 1) {
-								yield wrap([...segments.slice(last, i), ...[splits[0]].filter(Boolean)]);
+						const splits = (segments[i] as string).split(/(\n+)/);
+						if (splits.length <= 1) continue;
 
-								let j = 1;
-								const n = splits.length - 2;
-								while (j < n) {
-									yield splits[j++];
-									yield wrap([splits[j++]]);
-								}
-								yield splits[j++];
-								if (splits[j]) {
-									segments[i] = splits[j];
-									last = i;
-								} else {
-									last = i + 1;
-								}
-							}
+						yield wrap([...segments.slice(last, i), ...[splits[0]].filter(Boolean)]);
+
+						let j = 1;
+						const n = splits.length - 2;
+						while (j < n) {
+							yield splits[j++];
+							yield wrap([splits[j++]]);
 						}
-					}
-				} while (++i < segments.length);
-
+						yield splits[j++];
+						if (splits[j]) {
+							segments[i] = splits[j];
+							last = i;
+						} else {
+							last = i + 1;
+						}
+					} while (++i < segments.length);
+				}
 				if (last < segments.length) {
 					yield wrap(segments.slice(last));
 				}
