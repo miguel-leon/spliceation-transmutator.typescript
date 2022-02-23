@@ -28,5 +28,42 @@ describe('Splice function', () => {
 			expect(result).toBe('<a>A</a>-<b>B</b>');
 		});
 
+		test('with multiple level extractions and line breaks', () => {
+			const extraction: Extraction = {
+				segments: [
+					{
+						segments: [
+							'A',
+							{
+								segments: [
+									{
+										segments: ['C'],
+										class: 'c'
+									},
+									'B'
+								],
+								class: 'b'
+							}
+						],
+						class: 'a'
+					},
+					'\n\n',
+					{
+						segments: [
+							{
+								segments: ['B'],
+								class: 'b'
+							},
+							'A'
+						],
+						class: 'a'
+					}
+				]
+			};
+
+			const result = splice(extraction, transmuter);
+
+			expect(result).toBe('<a>A<b><c>C</c>B</b></a>\n\n<a><b>B</b>A</a>');
+		});
 	});
 });
