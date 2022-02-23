@@ -1,8 +1,26 @@
 import { regexp } from 'commonly.typescript/templates';
 import { pick } from 'commonly.typescript/objects';
 
+import { extract } from './extract';
+import { splice, Transmuter as _Transmuter } from './splice';
+
+
+export class Transmutation {
+	constructor(
+		public readonly definition: Transmutation.Definition,
+		public readonly transmuter: Transmutation.Transmuter
+	) {}
+
+	apply(content: string): string {
+		const extraction = extract(content, this.definition);
+		return splice(extraction, this.transmuter);
+	}
+}
+
 
 export namespace Transmutation {
+	export type Transmuter = _Transmuter;
+
 	export type Definition = Clause[];
 
 	export interface Clause {
