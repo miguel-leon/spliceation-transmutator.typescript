@@ -34,18 +34,25 @@ export namespace Transmutation {
 		return parse(definition);
 
 		function parse(definition: Schema.Clause[]): Definition {
-			return definition.map(clause => ({
-				class: clause.class,
-				match: Array.isArray(clause.match) ?
-					regexp.g`\b(${ clause.match.join('|') })\b` :
-					regexp.g.m(!!clause.multiline)(clause.match),
+			return definition.map(
+				({
+					class: _class,
+					match,
+					multiline,
+					recursion
+				}) => ({
+					class: _class,
+					match: Array.isArray(match) ?
+						regexp.g`\b(${ match.join('|') })\b` :
+						regexp.g.m(!!multiline)(match),
 
-				...prune({
-					recursion: Array.isArray(clause.recursion) ?
-						parse(clause.recursion) :
-						clause.recursion
+					...prune({
+						recursion: Array.isArray(recursion) ?
+							parse(recursion) :
+							recursion
+					})
 				})
-			}));
+			);
 		}
 	}
 }
