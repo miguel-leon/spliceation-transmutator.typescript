@@ -1,5 +1,5 @@
 import { regexp } from 'commonly.typescript/templates';
-import { pick } from 'commonly.typescript/objects';
+import { prune } from 'commonly.typescript/objects';
 
 import { extract } from './extract';
 import { splice, Transmuter as _Transmuter } from './splice';
@@ -31,13 +31,21 @@ export namespace Transmutation {
 
 	// TODO: remove any
 	export function fromJSON({ definition }: any): Definition {
-		return definition.map((clause: any) => ({
-			class: clause.class,
-			match: Array.isArray(clause.match) ?
-				regexp.g`\b(${ clause.match.join('|') })\b` :
-				regexp.g.m(!!clause.multiline)(clause.match),
+		return parse(definition);
 
-			...pick('recursion')(clause),
-		}));
+		function parse(definition: any[]): Definition {
+			return definition.map((clause: any) => ({
+				class: clause.class,
+				match: Array.isArray(clause.match) ?
+					regexp.g`\b(${ clause.match.join('|') })\b` :
+					regexp.g.m(!!clause.multiline)(clause.match),
+
+				...prune({
+					recursion: Array.isArray(clause.recursion) ?
+						parse(clause.recursion) :
+						clause.recursion
+				})
+			}));
+		}
 	}
 }

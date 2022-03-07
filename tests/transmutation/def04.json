@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/transmutation-definition.json",
+  "definition": [
+    {
+      "class": "multiline",
+      "match": "<#[^]*#>",
+      "multiline": true
+    }
+  ]
+}

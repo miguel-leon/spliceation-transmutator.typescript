@@ -26,5 +26,34 @@ describe('Definition from JSON', () => {
 				match: /\b(hello|goodbye)\b/g
 			}]);
 		});
+
+		test('with recursion', async () => {
+			const jsonDef = await import('./def03.json');
+
+			const def = Transmutation.fromJSON(jsonDef);
+
+			expect(def).toStrictEqual([{
+				class: 'outer',
+				match: /'.*'/g,
+				recursion: [
+					{
+						class: 'inner',
+						match: /\d+/g,
+						recursion: true
+					}
+				]
+			}]);
+		});
+
+		test('with multiline', async () => {
+			const jsonDef = await import('./def04.json');
+
+			const def = Transmutation.fromJSON(jsonDef);
+
+			expect(def).toStrictEqual([{
+				class: 'multiline',
+				match: /<#[^]*#>/gm
+			}]);
+		});
 	});
 });

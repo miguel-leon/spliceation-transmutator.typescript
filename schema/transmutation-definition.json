@@ -40,6 +40,22 @@
               }
             }
           ]
+        },
+        "recursion": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/clause"
+              }
+            }
+          ]
+        },
+        "multiline": {
+          "type": "boolean"
         }
       }
     }

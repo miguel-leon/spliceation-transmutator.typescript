@@ -1,0 +1,16 @@
+{
+  "$schema": "../../schema/transmutation-definition.json",
+  "definition": [
+    {
+      "class": "outer",
+      "match": "'.*'",
+      "recursion": [
+        {
+          "class": "inner",
+          "match": "\\d+",
+          "recursion": true
+        }
+      ]
+    }
+  ]
+}
