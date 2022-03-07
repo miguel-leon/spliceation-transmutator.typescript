@@ -1,6 +1,7 @@
 import { regexp } from 'commonly.typescript/templates';
 import { prune } from 'commonly.typescript/objects';
 
+import { Schema } from '../schema';
 import { extract } from './extract';
 import { splice, Transmuter as _Transmuter } from './splice';
 
@@ -29,12 +30,11 @@ export namespace Transmutation {
 		recursion?: boolean | Definition;
 	}
 
-	// TODO: remove any
-	export function fromJSON({ definition }: any): Definition {
+	export function fromJSON({ definition }: Schema.Transmutation): Definition {
 		return parse(definition);
 
-		function parse(definition: any[]): Definition {
-			return definition.map((clause: any) => ({
+		function parse(definition: Schema.Clause[]): Definition {
+			return definition.map(clause => ({
 				class: clause.class,
 				match: Array.isArray(clause.match) ?
 					regexp.g`\b(${ clause.match.join('|') })\b` :

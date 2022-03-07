@@ -17,7 +17,7 @@
       }
     }
   },
-  "required": [],
+  "required": ["$schema", "definition"],
   "definitions": {
     "clause": {
       "type": "object",
