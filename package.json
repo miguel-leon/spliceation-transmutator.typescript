@@ -4,7 +4,8 @@
   "description": "Well typed, string transmutation via splicing, driven by definitions of regular expressions, priority match and recursive clauses",
   "scripts": {
     "dev": "tsc --watch",
-    "build": "tsc && tsc -p tsconfig-cjs.json && cp package.json , readme.md ./dist",
+    "build": "tsc && tsc -p tsconfig-cjs.json",
+    "postbuild": "cp package.json , readme.md , schema/ ./dist -Recurse -Force",
     "test": "jest",
     "lint": "eslint --ext .ts ."
   },
