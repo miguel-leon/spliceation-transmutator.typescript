@@ -1,5 +1,5 @@
 {
-  "$schema": "../../schema/transmutation-definition.json",
+  "$schema": "../../transmutation-definition/schema.json",
   "definition": [
     {
       "class": "outer",

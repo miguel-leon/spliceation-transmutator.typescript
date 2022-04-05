@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc && tsc -p tsconfig-cjs.json",
-    "postbuild": "cp package.json , readme.md , schema/ ./dist -Recurse -Force",
+    "postbuild": "cp package.json , readme.md , transmutation-definition/schema.json , schema/ ./dist -Recurse -Force",
     "test": "jest",
     "lint": "eslint --ext .ts ."
   },
