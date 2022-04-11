@@ -19,7 +19,7 @@ export namespace Clause {
 	export function parse(clause: Schema.Transmutation['definition'][number]): Clause {
 		return 'match' in clause ?
 			SingleClause.parse(clause) :
-			Multiclause.parse(clause)
+			MultiClause.parse(clause)
 	}
 }
 
@@ -34,7 +34,7 @@ export class SingleClause implements Clause {
 			match,
 			multiline,
 			recursion
-		}: Schema.Clause
+		}: Schema.SingleClause
 	) {
 		return new SingleClause({
 			pattern: Array.isArray(match) ?
@@ -68,12 +68,44 @@ export class SingleClause implements Clause {
 	}
 }
 
-export class Multiclause implements Clause {
-	static parse({ concurrent }: Schema.Multiclause) {
-		return new Multiclause();
+export class MultiClause implements Clause {
+	private readonly pattern!: RegExp;
+	private readonly clauses!: {
+		class: string,
+		multiline: boolean,
+		recursion: boolean | Clause[]
+	}[];
+
+	static parse({ concurrent }: Schema.MultiClause) {
+		return new MultiClause({
+			pattern: regexp.g.m(concurrent.some(({ multiline }) => multiline))(
+				concurrent
+					.map(
+						({ match }) => Array.isArray(match) ?
+							String.raw`\b(?:${ match.join('|') })\b` :
+							match
+					)
+					.map(pattern => `(${ pattern })`)
+					.join('|')
+			),
+			clauses: concurrent.map(
+				({
+					class: class_,
+					multiline,
+					recursion
+				}) => ({
+					class: class_,
+					multiline: !!multiline,
+					recursion: Array.isArray(recursion) ?
+						recursion.map(Clause.parse) :
+						!!recursion
+				})
+			)
+		});
 	}
 
-	constructor() {
+	constructor(properties: ForcePick<MultiClause, 'pattern' | 'clauses'>) {
+		Object.assign(this, properties);
 	}
 
 	searchThrough(content: string): Iterable<Clause.Instance> {

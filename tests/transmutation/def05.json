@@ -1,0 +1,42 @@
+{
+  "$schema": "../../transmutation-definition/schema.json",
+  "definition": [
+    {
+      "concurrent": [
+        {
+          "class": "string",
+          "match": "'.*?'",
+          "recursion": [
+            {
+              "class": "X",
+              "match": "X"
+            }
+          ]
+        },
+        {
+          "class": "comment",
+          "match": "<#[^]*#>",
+          "multiline": true,
+          "recursion": [
+            {
+              "concurrent": [
+                {
+                  "class": "A",
+                  "match": "A"
+                },
+                {
+                  "class": "B",
+                  "match": "B"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "class": "symbol",
+          "match": [":", ";"]
+        }
+      ]
+    }
+  ]
+}

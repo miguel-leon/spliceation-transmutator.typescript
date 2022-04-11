@@ -58,5 +58,54 @@ describe('Definition from JSON', () => {
 				recursion: false
 			}]);
 		});
+
+		test('with concurrent clauses and recursion', async () => {
+			const jsonDef = await import('./def05.json');
+
+			const def = Transmutation.fromJSON(jsonDef);
+
+			expect(def).toEqual([{
+				pattern: /('.*?')|(<#[^]*#>)|(\b(?::|;)\b)/gm,
+				clauses: [
+					{
+						class: 'string',
+						multiline: false,
+						recursion: [
+							{
+								class: 'X',
+								pattern: /X/g,
+								recursion: false
+							}
+						]
+					},
+					{
+						class: 'comment',
+						multiline: true,
+						recursion: [
+							{
+								pattern: /(A)|(B)/g,
+								clauses: [
+									{
+										class: 'A',
+										multiline: false,
+										recursion: false
+									},
+									{
+										class: 'B',
+										multiline: false,
+										recursion: false
+									}
+								]
+							}
+						]
+					},
+					{
+						class: 'symbol',
+						multiline: false,
+						recursion: false
+					}
+				]
+			}]);
+		});
 	});
 });

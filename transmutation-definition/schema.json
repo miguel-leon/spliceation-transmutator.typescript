@@ -20,6 +20,16 @@
   "required": ["$schema", "definition"],
   "definitions": {
     "clause": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/single-clause"
+        },
+        {
+          "$ref": "#/definitions/multi-clause"
+        }
+      ]
+    },
+    "single-clause": {
       "type": "object",
       "additionalProperties": false,
       "required": ["class", "match"],
@@ -56,6 +66,19 @@
         },
         "multiline": {
           "type": "boolean"
+        }
+      }
+    },
+    "multi-clause": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["concurrent"],
+      "properties": {
+        "concurrent": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/single-clause"
+          }
         }
       }
     }
