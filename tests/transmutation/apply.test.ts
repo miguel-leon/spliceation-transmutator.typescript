@@ -8,12 +8,14 @@ describe('Transmutation class', () => {
 		const transmutation = new Transmutation(
 			[
 				new SingleClause({
-					match: ['const'],
-					class: 'key'
+					pattern: /\bconst\b/g,
+					class: 'key',
+					recursion: false
 				}),
 				new SingleClause({
-					match: '\\b\\d+\\b',
-					class: 'number'
+					pattern: /\b\d+\b/g,
+					class: 'number',
+					recursion: false
 				})
 			],
 			(_class: string, content: string) =>

@@ -1,5 +1,6 @@
-import { Schema } from "../schema";
 import { regexp } from 'commonly.typescript/templates';
+import { Schema } from "../schema";
+import { ForcePick } from './util';
 
 
 export interface Clause {
@@ -17,17 +18,17 @@ export namespace Clause {
 
 	export function parse(clause: Schema.Transmutation['definition'][number]): Clause {
 		return 'match' in clause ?
-			new SingleClause(clause) :
-			new Multiclause(clause)
+			SingleClause.parse(clause) :
+			Multiclause.parse(clause)
 	}
 }
 
 export class SingleClause implements Clause {
-	private readonly pattern: RegExp;
-	private readonly class: string;
-	private readonly recursion: boolean | Clause[];
+	private readonly pattern!: RegExp;
+	private readonly class!: string;
+	private readonly recursion!: boolean | Clause[];
 
-	constructor(
+	static parse(
 		{
 			class: class_,
 			match,
@@ -35,17 +36,19 @@ export class SingleClause implements Clause {
 			recursion
 		}: Schema.Clause
 	) {
-		this.pattern = Array.isArray(match) ?
-			regexp.g`\b(?:${ match.join('|') })\b` :
-			regexp.g.m(!!multiline)(match);
+		return new SingleClause({
+			pattern: Array.isArray(match) ?
+				regexp.g`\b(?:${ match.join('|') })\b` :
+				regexp.g.m(!!multiline)(match),
+			class: class_,
+			recursion: Array.isArray(recursion) ?
+				recursion.map(Clause.parse) :
+				!!recursion
+		});
+	}
 
-		this.class = class_;
-
-		if (Array.isArray(recursion)) {
-			this.recursion = recursion.map(Clause.parse);
-		} else {
-			this.recursion = !!recursion;
-		}
+	constructor(properties: ForcePick<SingleClause, 'pattern' | 'class' | 'recursion'>) {
+		Object.assign(this, properties);
 	}
 
 	searchThrough(content: string): Iterable<Clause.Instance> {
@@ -66,7 +69,11 @@ export class SingleClause implements Clause {
 }
 
 export class Multiclause implements Clause {
-	constructor({ concurrent }: Schema.Multiclause) {
+	static parse({ concurrent }: Schema.Multiclause) {
+		return new Multiclause();
+	}
+
+	constructor() {
 	}
 
 	searchThrough(content: string): Iterable<Clause.Instance> {

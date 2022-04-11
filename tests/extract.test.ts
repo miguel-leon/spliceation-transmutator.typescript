@@ -3,21 +3,16 @@ import { extract } from '@src/extract';
 import { SingleClause } from '@src/clause';
 
 
-type ForcePick<T extends { [k: string]: any }, K extends string> = {
-	[k in K]?: T[k];
-}
-
-function mockSingleClauses(clauses: ForcePick<SingleClause, 'pattern' | 'class' | 'recursion'>[]): Transmutation.Definition {
-	return clauses.map(clause => Object.assign(Object.create(SingleClause.prototype), clause));
-}
-
 describe('Extract function', () => {
 
 	test('creates a Extraction from a Definition with single clause', () => {
-		const definition: Transmutation.Definition = mockSingleClauses([{
-			pattern: /a/g,
-			class: 'a'
-		}]);
+		const definition: Transmutation.Definition = [
+			new SingleClause({
+				pattern: /a/g,
+				class: 'a',
+				recursion: false
+			})
+		];
 		const content = 'abcabc';
 
 		const result = extract(content, definition);
@@ -33,13 +28,18 @@ describe('Extract function', () => {
 	});
 
 	test('creates a Extraction from a Definition with multiple clauses', () => {
-		const definition: Transmutation.Definition = mockSingleClauses([{
-			pattern: /a/g,
-			class: 'a'
-		}, {
-			pattern: /c/g,
-			class: 'c'
-		}]);
+		const definition: Transmutation.Definition = [
+			new SingleClause({
+				pattern: /a/g,
+				class: 'a',
+				recursion: false
+			}),
+			new SingleClause({
+				pattern: /c/g,
+				class: 'c',
+				recursion: false
+			})
+		];
 		const content = 'abcabc';
 
 		const result = extract(content, definition);
@@ -66,10 +66,13 @@ describe('Extract function', () => {
 	});
 
 	test('splits the resulting segment into multiple when matching multiline', () => {
-		const definition: Transmutation.Definition = mockSingleClauses([{
-			pattern: /a\sa/gm,
-			class: 'a'
-		}]);
+		const definition: Transmutation.Definition = [
+			new SingleClause({
+				pattern: /a\sa/gm,
+				class: 'a',
+				recursion: false
+			})
+		];
 		const content = 'bbba\nabbb';
 
 		const result = extract(content, definition);
@@ -86,18 +89,25 @@ describe('Extract function', () => {
 	});
 
 	test('does recursive specification', () => {
-		const definition: Transmutation.Definition = mockSingleClauses([{
-			pattern: /a\S*a/g,
-			class: 'a',
-			recursion: mockSingleClauses([{
-				pattern: /b.*?b/g,
-				class: 'b',
-				recursion: mockSingleClauses([{
-					pattern: /c+/g,
-					class: 'c'
-				}])
-			}])
-		}]);
+		const definition: Transmutation.Definition = [
+			new SingleClause({
+				pattern: /a\S*a/g,
+				class: 'a',
+				recursion: [
+					new SingleClause({
+						pattern: /b.*?b/g,
+						class: 'b',
+						recursion: [
+							new SingleClause({
+								pattern: /c+/g,
+								class: 'c',
+								recursion: false
+							})
+						]
+					})
+				]
+			})
+		];
 		const content = 'aabccbaa aabcbcbbaa';
 
 		const result = extract(content, definition);
@@ -151,15 +161,19 @@ describe('Extract function', () => {
 	});
 
 	describe('does recursive specification with line breaks', () => {
-		const definition: Transmutation.Definition = mockSingleClauses([{
-			pattern: /`({({[^}]*}|[^}])*}|[^`])*`/gm,
-			class: 's',
-			recursion: mockSingleClauses([{
-				pattern: /{({[^}]*}|`({[^}]*}|[^`])*`|[^}])*}/gm,
-				class: 'i',
-				recursion: true
-			}])
-		}]);
+		const definition: Transmutation.Definition = [
+			new SingleClause({
+				pattern: /`({({[^}]*}|[^}])*}|[^`])*`/gm,
+				class: 's',
+				recursion: [
+					new SingleClause({
+						pattern: /{({[^}]*}|`({[^}]*}|[^`])*`|[^}])*}/gm,
+						class: 'i',
+						recursion: true
+					})
+				]
+			})
+		];
 
 		test('at top level clause', () => {
 			const content = '`aa\n\na\n{`bbb`{`ccc`}}{`ddd`}\naaa`\n';
