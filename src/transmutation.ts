@@ -1,9 +1,7 @@
-import { regexp } from 'commonly.typescript/templates';
-import { prune } from 'commonly.typescript/objects';
-
 import { Schema } from '../schema';
 import { extract } from './extract';
 import { splice, Transmuter as _Transmuter } from './splice';
+import { Clause as _Clause } from './clause';
 
 
 export class Transmutation {
@@ -22,37 +20,15 @@ export class Transmutation {
 export namespace Transmutation {
 	export type Transmuter = _Transmuter;
 
-	export type Definition = Clause[];
+	export type Clause = _Clause;
 
-	export interface Clause {
-		class: string;
-		match: RegExp;
-		recursion?: boolean | Definition;
-	}
+	export type Definition = Clause[];
 
 	export function fromJSON({ definition }: Schema.Transmutation): Definition {
 		return parse(definition);
 
-		function parse(definition: Schema.Clause[]): Definition {
-			return definition.map(
-				({
-					class: _class,
-					match,
-					multiline,
-					recursion
-				}) => ({
-					class: _class,
-					match: Array.isArray(match) ?
-						regexp.g`\b(${ match.join('|') })\b` :
-						regexp.g.m(!!multiline)(match),
-
-					...prune({
-						recursion: Array.isArray(recursion) ?
-							parse(recursion) :
-							recursion
-					})
-				})
-			);
+		function parse(definition: Schema.Transmutation['definition']): Definition {
+			return definition.map(_Clause.parse);
 		}
 	}
 }

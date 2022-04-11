@@ -10,9 +10,10 @@ describe('Definition from JSON', () => {
 
 			const def = Transmutation.fromJSON(jsonDef);
 
-			expect(def).toStrictEqual([{
+			expect(def).toEqual([{
 				class: 'class1',
-				match: /<.+>/g
+				pattern: /<.+>/g,
+				recursion: false
 			}]);
 		});
 
@@ -21,9 +22,10 @@ describe('Definition from JSON', () => {
 
 			const def = Transmutation.fromJSON(jsonDef);
 
-			expect(def).toStrictEqual([{
+			expect(def).toEqual([{
 				class: 'class2',
-				match: /\b(hello|goodbye)\b/g
+				pattern: /\b(?:hello|goodbye)\b/g,
+				recursion: false
 			}]);
 		});
 
@@ -32,13 +34,13 @@ describe('Definition from JSON', () => {
 
 			const def = Transmutation.fromJSON(jsonDef);
 
-			expect(def).toStrictEqual([{
+			expect(def).toEqual([{
 				class: 'outer',
-				match: /'.*'/g,
+				pattern: /'.*'/g,
 				recursion: [
 					{
 						class: 'inner',
-						match: /\d+/g,
+						pattern: /\d+/g,
 						recursion: true
 					}
 				]
@@ -50,9 +52,10 @@ describe('Definition from JSON', () => {
 
 			const def = Transmutation.fromJSON(jsonDef);
 
-			expect(def).toStrictEqual([{
+			expect(def).toEqual([{
 				class: 'multiline',
-				match: /<#[^]*#>/gm
+				pattern: /<#[^]*#>/gm,
+				recursion: false
 			}]);
 		});
 	});

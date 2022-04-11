@@ -37,21 +37,21 @@ export function extract(
 
 		function* segmentation(): Generator<Segments[number]> {
 			let prev = 0;
-			for (const { 0: match, index } of segment.matchAll(clause.match)) {
+			for (const { match, index, class: class_, multiline, recursion } of clause.searchThrough(segment)) {
 				if (prev < index!) yield segment.substring(prev, index);
 
 				const segments: Segments =
-					clause.recursion ?
+					recursion ?
 						sweep(
-							Array.isArray(clause.recursion) ?
-								clause.recursion :
+							Array.isArray(recursion) ?
+								recursion :
 								definition,
 							[match]
 						) :
 						[match];
 
 				let last = 0, i = 0;
-				if (clause.match.multiline && splitOnLineBreaks) {
+				if (multiline && splitOnLineBreaks) {
 					do {
 						if (typeof segments[i] !== 'string') continue;
 
@@ -80,15 +80,15 @@ export function extract(
 				}
 
 				prev = index! + match.length;
+
+				function wrap(segments: Segments) {
+					return {
+						segments,
+						class: class_
+					};
+				}
 			}
 			if (prev < segment.length) yield segment.substring(prev);
-
-			function wrap(segments: Segments) {
-				return {
-					segments,
-					class: clause.class
-				};
-			}
 		}
 	}
 }

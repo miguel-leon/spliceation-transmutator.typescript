@@ -1,4 +1,5 @@
 import { Transmutation } from '@src/transmutation';
+import { SingleClause } from '@src/clause';
 
 
 describe('Transmutation class', () => {
@@ -6,14 +7,14 @@ describe('Transmutation class', () => {
 	test('applies transmutation', () => {
 		const transmutation = new Transmutation(
 			[
-				{
-					match: /\bconst\b/g,
+				new SingleClause({
+					match: ['const'],
 					class: 'key'
-				},
-				{
-					match: /\b\d+\b/g,
+				}),
+				new SingleClause({
+					match: '\\b\\d+\\b',
 					class: 'number'
-				}
+				})
 			],
 			(_class: string, content: string) =>
 				`<${ _class }>${ content }</${ _class }>`
