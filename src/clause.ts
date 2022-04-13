@@ -113,5 +113,13 @@ export class MultiClause implements Clause {
 	}
 
 	private* occurrenceIterator(content: string): Generator<Clause.Instance> {
+		for (const result of content.matchAll(this.pattern)) {
+			const [match, ...groups] = result;
+			yield {
+				match,
+				index: result.index!,
+				...this.clauses[groups.findIndex(capture => capture === match)]
+			};
+		}
 	}
 }

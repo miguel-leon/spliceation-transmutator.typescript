@@ -1,6 +1,6 @@
 import { Transmutation } from '@src/transmutation';
 import { extract } from '@src/extract';
-import { SingleClause } from '@src/clause';
+import { MultiClause, SingleClause } from '@src/clause';
 
 
 describe('Extract function', () => {
@@ -364,6 +364,70 @@ describe('Extract function', () => {
 					}
 				]
 			});
+		});
+	});
+
+	test('does concurrent clauses', () => {
+		const definition: Transmutation.Definition = [
+			new MultiClause({
+				pattern: /((?<!^)\([^]*?\))|(\[[^]*?])/gm,
+				clauses: [
+					{
+						class: 'paren',
+						multiline: true,
+						recursion: true
+					},
+					{
+						class: 'bracket',
+						multiline: true,
+						recursion: false
+					},
+				]
+			})
+		];
+		const content = '[(xx\nxx)]-([)-(][xx\nxx])';
+
+		const result = extract(content, definition);
+
+		expect(result).toEqual({
+			segments: [
+				{
+					class: 'bracket',
+					segments: ['[(xx']
+				},
+				'\n',
+				{
+					class: 'bracket',
+					segments: ['xx)]']
+				},
+				'-',
+				{
+					class: 'paren',
+					segments: ['([)']
+				},
+				'-',
+				{
+					class: 'paren',
+					segments: [
+						'(]',
+						{
+							class: 'bracket',
+							segments: ['[xx']
+						}
+					]
+				},
+				'\n',
+				{
+					class: 'paren',
+					segments: [
+						{
+							class: 'bracket',
+							segments: ['xx]']
+						},
+						')'
+					]
+				}
+			]
 		});
 	});
 });
