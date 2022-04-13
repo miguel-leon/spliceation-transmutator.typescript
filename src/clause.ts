@@ -51,11 +51,7 @@ export class SingleClause implements Clause {
 		Object.assign(this, properties);
 	}
 
-	searchThrough(content: string): Iterable<Clause.Instance> {
-		return this.occurrenceIterator(content);
-	}
-
-	private* occurrenceIterator(content: string): Generator<Clause.Instance> {
+	* searchThrough(content: string): Iterable<Clause.Instance> {
 		for (const { 0: match, index } of content.matchAll(this.pattern)) {
 			yield {
 				match,
@@ -108,11 +104,7 @@ export class MultiClause implements Clause {
 		Object.assign(this, properties);
 	}
 
-	searchThrough(content: string): Iterable<Clause.Instance> {
-		return this.occurrenceIterator(content);
-	}
-
-	private* occurrenceIterator(content: string): Generator<Clause.Instance> {
+	* searchThrough(content: string): Iterable<Clause.Instance> {
 		for (const result of content.matchAll(this.pattern)) {
 			const [match, ...groups] = result;
 			yield {
