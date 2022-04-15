@@ -1,5 +1,5 @@
 import { regexp } from 'commonly.typescript/templates';
-import { Schema } from "../schema";
+import { Schema } from '../schema';
 import { ForcePick } from './util';
 
 

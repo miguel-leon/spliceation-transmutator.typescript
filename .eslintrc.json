@@ -19,6 +19,8 @@
     "dist/**"
   ],
   "rules": {
+    "quotes": ["error", "single"],
+    "no-inner-declarations": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-namespace": "off",
     "@typescript-eslint/no-non-null-assertion": "off"
