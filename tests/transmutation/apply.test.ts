@@ -1,5 +1,5 @@
 import { Transmutation } from '@src/transmutation';
-import { SingleClause } from '@src/clause';
+import { SingleClause } from '@src/clauses';
 
 
 describe('Transmutation class', () => {

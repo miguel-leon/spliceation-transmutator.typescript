@@ -27,6 +27,10 @@
     ".": {
       "import": "./index.js",
       "require": "./cjs/index.js"
+    },
+    "./clauses": {
+      "import": "./clauses/index.js",
+      "require": "./cjs/clauses/index.js"
     }
   },
   "repository": {

@@ -1,6 +1,6 @@
 import { Transmutation } from '@src/transmutation';
 import { extract } from '@src/extract';
-import { MultiClause, SingleClause } from '@src/clause';
+import { MultiClause, SingleClause } from '@src/clauses';
 
 
 describe('Extract function', () => {
