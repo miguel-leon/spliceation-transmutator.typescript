@@ -76,7 +76,8 @@ describe('Definition from JSON', () => {
 								pattern: /X/g,
 								recursion: false
 							}
-						]
+						],
+						capturingGroupIndex: 1
 					},
 					{
 						class: 'comment',
@@ -88,21 +89,49 @@ describe('Definition from JSON', () => {
 									{
 										class: 'A',
 										multiline: false,
-										recursion: false
+										recursion: false,
+										capturingGroupIndex: 1
 									},
 									{
 										class: 'B',
 										multiline: false,
-										recursion: false
+										recursion: false,
+										capturingGroupIndex: 2
 									}
 								]
 							}
-						]
+						],
+						capturingGroupIndex: 2
 					},
 					{
 						class: 'symbol',
 						multiline: false,
-						recursion: false
+						recursion: false,
+						capturingGroupIndex: 3
+					}
+				]
+			}]);
+		});
+
+		test('with concurrent clauses using capturing groups adjusting numeric back references', async () => {
+			const jsonDef = await import('./def06.json');
+
+			const def = Transmutation.fromJSON(jsonDef);
+
+			expect(def).toEqual([{
+				pattern: /((?<q>["'])(.)\3\k<q>)|(([-~])(\d)\6\5)/g,
+				clauses: [
+					{
+						class: 'quote',
+						multiline: false,
+						recursion: false,
+						capturingGroupIndex: 1
+					},
+					{
+						class: 'dash',
+						multiline: false,
+						recursion: false,
+						capturingGroupIndex: 4
 					}
 				]
 			}]);

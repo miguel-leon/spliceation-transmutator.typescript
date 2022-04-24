@@ -17,7 +17,7 @@ export namespace Clause {
 
 	export function parse(clause: Schema.Transmutation['definition'][number]): Clause {
 		return 'match' in clause ?
-			SingleClause.parse(clause) :
-			MultiClause.parse(clause)
+			new SingleClause(SingleClause.parse(clause)) :
+			new MultiClause(MultiClause.parse(clause))
 	}
 }

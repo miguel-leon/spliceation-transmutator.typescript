@@ -15,10 +15,9 @@ export class SingleClause implements Clause {
 			match,
 			multiline,
 			recursion
-		}: Schema.SingleClause,
-		ClauseClass = SingleClause
-	) {
-		return new ClauseClass({
+		}: Schema.SingleClause
+	): ConstructorParameters<typeof SingleClause>[0] {
+		return {
 			pattern: Array.isArray(match) ?
 				regexp.g`\b(?:${ match.join('|') })\b` :
 				regexp.g.m(!!multiline)(match),
@@ -26,7 +25,7 @@ export class SingleClause implements Clause {
 			recursion: Array.isArray(recursion) ?
 				recursion.map(Clause.parse) :
 				!!recursion
-		});
+		};
 	}
 
 	constructor(properties: ForcePick<SingleClause, 'pattern' | 'class' | 'recursion'>) {

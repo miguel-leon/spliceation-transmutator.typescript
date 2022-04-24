@@ -1,0 +1,17 @@
+{
+  "$schema": "../../transmutation-definition/schema.json",
+  "definition": [
+    {
+      "concurrent": [
+        {
+          "match": "(?<q>[\"'])(.)\\2\\k<q>",
+          "class": "quote"
+        },
+        {
+          "match": "([-~])(\\d)\\2\\1",
+          "class": "dash"
+        }
+      ]
+    }
+  ]
+}

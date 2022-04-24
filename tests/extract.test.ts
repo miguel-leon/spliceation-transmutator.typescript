@@ -369,21 +369,18 @@ describe('Extract function', () => {
 
 	test('does concurrent clauses', () => {
 		const definition: Transmutation.Definition = [
-			new MultiClause({
-				pattern: /((?<!^)\([^]*?\))|(\[[^]*?])/gm,
-				clauses: [
-					{
-						class: 'paren',
-						multiline: true,
-						recursion: true
-					},
-					{
-						class: 'bracket',
-						multiline: true,
-						recursion: false
-					},
-				]
-			})
+			new MultiClause([
+				{
+					pattern: /(?<!^)\([^]*?\)/gm,
+					class: 'paren',
+					recursion: true
+				},
+				{
+					pattern: /\[[^]*?]/gm,
+					class: 'bracket',
+					recursion: false
+				}
+			])
 		];
 		const content = '[(xx\nxx)]-([)-(][xx\nxx])';
 
@@ -426,6 +423,47 @@ describe('Extract function', () => {
 						},
 						')'
 					]
+				}
+			]
+		});
+	});
+
+	test('does concurrent clauses with capturing groups', () => {
+		const definition: Transmutation.Definition = [
+			new MultiClause([
+				{
+					pattern: /(?<q>["'])[^]*?\k<q>/g,
+					class: 'quote',
+					recursion: false
+				},
+				{
+					pattern: /([-~])[^]*?\1/g,
+					class: 'dash',
+					recursion: false
+				}
+			])
+		];
+		const content = `'a'"b"-c-~d~`;
+
+		const result = extract(content, definition);
+
+		expect(result).toEqual({
+			segments: [
+				{
+					class: 'quote',
+					segments: [`'a'`]
+				},
+				{
+					class: 'quote',
+					segments: ['"b"']
+				},
+				{
+					class: 'dash',
+					segments: ['-c-']
+				},
+				{
+					class: 'dash',
+					segments: ['~d~']
 				}
 			]
 		});
