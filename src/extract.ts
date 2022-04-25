@@ -55,7 +55,7 @@ export function extract(
 					do {
 						if (typeof segments[i] !== 'string') continue;
 
-						const splits = (segments[i] as string).split(/(\n+)/);
+						const splits = (segments[i] as string).split(/((?:\r?\n)+)/);
 						if (splits.length <= 1) continue;
 
 						yield wrap([...segments.slice(last, i), ...[splits[0]].filter(Boolean)]);
