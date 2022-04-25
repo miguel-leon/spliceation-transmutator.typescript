@@ -19,7 +19,7 @@
     "dist/**"
   ],
   "rules": {
-    "quotes": ["error", "single"],
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }],
     "no-inner-declarations": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-namespace": "off",
