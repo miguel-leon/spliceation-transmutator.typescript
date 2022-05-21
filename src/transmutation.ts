@@ -1,4 +1,4 @@
-import { Schema } from '../schema';
+import { Schema } from './schema';
 import { extract } from './extract';
 import { splice, Transmuter as _Transmuter } from './splice';
 import { Clause as _Clause } from './clause';

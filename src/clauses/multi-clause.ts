@@ -1,6 +1,6 @@
 import { regexp } from 'commonly.typescript/templates';
+import { Schema } from '../schema';
 import { Clause } from '../clause';
-import { Schema } from '../../schema';
 import { SingleClause } from './single-clause';
 
 

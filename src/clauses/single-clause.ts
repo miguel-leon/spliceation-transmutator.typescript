@@ -1,7 +1,7 @@
 import { regexp } from 'commonly.typescript/templates';
+import { Schema } from '../schema';
 import { ForcePick } from '../util';
 import { Clause } from '../clause';
-import { Schema } from '../../schema';
 
 
 export class SingleClause implements Clause {

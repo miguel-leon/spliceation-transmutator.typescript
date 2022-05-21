@@ -4,5 +4,8 @@
     "module": "CommonJS",
     "outDir": "./dist/cjs",
     "declaration": false
-  }
+  },
+  "include": [
+    "./src/index.cjs.ts"
+  ]
 }

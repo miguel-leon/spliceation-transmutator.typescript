@@ -1,4 +1,4 @@
-import { Schema } from '../schema';
+import { Schema } from './schema';
 import { MultiClause, SingleClause } from './clauses';
 
 
