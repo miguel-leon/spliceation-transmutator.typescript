@@ -136,5 +136,21 @@ describe('Definition from JSON', () => {
 				]
 			}]);
 		});
+
+		test('with case insensitive string regex and array', async () => {
+			const jsonDef = await import('./def07.json');
+
+			const def = Transmutation.fromJSON(jsonDef);
+
+			expect(def).toEqual([{
+				class: 'class1',
+				pattern: /\becho(?=\s*["'])/gi,
+				recursion: false
+			}, {
+				class: 'class2',
+				pattern: /\b(?:function|procedure)\b/gi,
+				recursion: false
+			}]);
+		});
 	});
 });

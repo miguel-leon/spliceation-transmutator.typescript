@@ -66,6 +66,9 @@
         },
         "multiline": {
           "type": "boolean"
+        },
+        "ignoreCase": {
+          "type": "boolean"
         }
       }
     },
