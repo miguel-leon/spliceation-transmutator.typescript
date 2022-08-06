@@ -14,13 +14,14 @@ export class SingleClause implements Clause {
 			class: class_,
 			match,
 			multiline,
+			ignoreCase,
 			recursion
 		}: Schema.SingleClause
 	): ConstructorParameters<typeof SingleClause>[0] {
 		return {
 			pattern: Array.isArray(match) ?
-				regexp.g`\b(?:${ match.join('|') })\b` :
-				regexp.g.m(!!multiline)(match),
+				regexp.g.i(!!ignoreCase)`\b(?:${ match.join('|') })\b` :
+				regexp.g.i(!!ignoreCase).m(!!multiline)(match),
 			class: class_,
 			recursion: Array.isArray(recursion) ?
 				recursion.map(Clause.parse) :

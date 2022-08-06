@@ -1,0 +1,15 @@
+{
+  "$schema": "../../transmutation-definition/schema.json",
+  "definition": [
+    {
+      "class": "class1",
+      "match": "\\becho(?=\\s*[\"'])",
+      "ignoreCase": true
+    },
+    {
+      "class": "class2",
+      "match": ["function", "procedure"],
+      "ignoreCase": true
+    }
+  ]
+}

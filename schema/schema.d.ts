@@ -16,6 +16,7 @@ export interface SingleClause {
 	match: string | string[]
 	recursion?: boolean | Clause[]
 	multiline?: boolean
+	ignoreCase?: boolean
 }
 export interface MultiClause {
 	concurrent: SingleClause[]
