@@ -17,12 +17,13 @@ describe('Transmutation class', () => {
 					class: 'number',
 					recursion: false
 				})
-			],
-			(_class: string, content: string) =>
-				`<${ _class }>${ content }</${ _class }>`
+			]
 		);
 
-		const result = transmutation.apply('const X = 99;');
+		const result = transmutation.apply(
+			'const X = 99;',
+			(_class: string, content: string) => `<${ _class }>${ content }</${ _class }>`
+		);
 
 		expect(result).toBe('<key>const</key> X = <number>99</number>;');
 	});

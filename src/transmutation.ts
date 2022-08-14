@@ -6,13 +6,12 @@ import { Clause as _Clause } from './clause';
 
 export class Transmutation {
 	constructor(
-		public readonly definition: Transmutation.Definition,
-		public readonly transmuter: Transmutation.Transmuter
+		public readonly definition: Transmutation.Definition
 	) {}
 
-	apply(content: string): string {
+	apply(content: string, transmuter: Transmutation.Transmuter): string {
 		const extraction = extract(content, this.definition);
-		return splice(extraction, this.transmuter);
+		return splice(extraction, transmuter);
 	}
 }
 
