@@ -150,6 +150,14 @@ describe('Definition from JSON', () => {
 				class: 'class2',
 				pattern: /\b(?:function|procedure)\b/gi,
 				recursion: false
+			}, {
+				pattern: /(xxx)/gi,
+				clauses: [{
+					class: 'class3',
+					capturingGroupIndex: 1,
+					multiline: false,
+					recursion: false
+				}]
 			}]);
 		});
 	});

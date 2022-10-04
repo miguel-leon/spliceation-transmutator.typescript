@@ -10,6 +10,15 @@
       "class": "class2",
       "match": ["function", "procedure"],
       "ignoreCase": true
+    },
+    {
+      "concurrent": [
+        {
+          "class": "class3",
+          "match": "xxx",
+          "ignoreCase": true
+        }
+      ]
     }
   ]
 }

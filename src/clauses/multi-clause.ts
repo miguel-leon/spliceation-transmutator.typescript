@@ -36,7 +36,9 @@ export class MultiClause implements Clause {
 				)
 			})
 		);
-		this.pattern = regexp.g.m(clauses.some(({ pattern }) => pattern.multiline))(
+		this.pattern = regexp.g
+			.i(clauses.some(({ pattern }) => pattern.ignoreCase))
+			.m(clauses.some(({ pattern }) => pattern.multiline))(
 			clauses
 				.map(({ pattern }, i) => `(${ adjustBackReferences(pattern.source, this.clauses[i].capturingGroupIndex) })`)
 				.join('|')
