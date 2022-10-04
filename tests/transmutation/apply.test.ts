@@ -8,7 +8,7 @@ describe('Transmutation class', () => {
 		const transmutation = new Transmutation(
 			[
 				new SingleClause({
-					pattern: /\bconst\b/g,
+					pattern: /\bconst\b/gi,
 					class: 'key',
 					recursion: false
 				}),
@@ -21,10 +21,10 @@ describe('Transmutation class', () => {
 		);
 
 		const result = transmutation.apply(
-			'const X = 99;',
+			'CONST X = 99;',
 			(_class: string, content: string) => `<${ _class }>${ content }</${ _class }>`
 		);
 
-		expect(result).toBe('<key>const</key> X = <number>99</number>;');
+		expect(result).toBe('<key>CONST</key> X = <number>99</number>;');
 	});
 });
