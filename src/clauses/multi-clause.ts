@@ -77,5 +77,5 @@ function numberOfMatchingGroups(re: RegExp) {
 }
 
 function adjustBackReferences(source: string, groupsBehind: number) {
-	return source.replaceAll(/((?<!\\)(?:\\\\)*\\)(\d+)/g, (_, p1, p2) => `${ p1 }${ Number(p2) + groupsBehind }`);
+	return source.replaceAll(/\\(\d+)|\\./g, (match, ref) => ref ? `\\${ Number(ref) + groupsBehind }` : match);
 }

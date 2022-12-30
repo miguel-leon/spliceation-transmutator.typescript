@@ -119,7 +119,7 @@ describe('Definition from JSON', () => {
 			const def = Transmutation.fromJSON(jsonDef);
 
 			expect(def).toEqual([{
-				pattern: /((?<q>["'])(.)\3\k<q>)|(([-~])(\d)\6\5)/g,
+				pattern: /((?<q>["'])(.)\3\k<q>)|(([-~])(\d)\6\5\\69)/g,
 				clauses: [
 					{
 						class: 'quote',
