@@ -32,7 +32,7 @@
     "single-clause": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["class", "match"],
+      "required": ["match"],
       "properties": {
         "class": {
           "type": "string"

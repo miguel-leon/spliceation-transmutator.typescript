@@ -7,7 +7,7 @@ import { SingleClause } from './single-clause';
 export class MultiClause implements Clause {
 	private readonly pattern: RegExp;
 	private readonly clauses: {
-		class: string,
+		class?: string,
 		multiline: boolean,
 		recursion: boolean | Clause[],
 		capturingGroupIndex: number

@@ -12,7 +12,7 @@ export interface Transmutation {
 	definition: Clause[]
 }
 export interface SingleClause {
-	class: string
+	class?: string
 	match: string | string[]
 	recursion?: boolean | Clause[]
 	multiline?: boolean

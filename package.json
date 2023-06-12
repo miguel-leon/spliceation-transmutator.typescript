@@ -1,6 +1,6 @@
 {
   "name": "spliceation-transmutator.typescript",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Well typed, string transmutation via splicing, driven by definitions of regular expressions, priority match and recursive clauses",
   "scripts": {
     "dev": "tsc --watch",

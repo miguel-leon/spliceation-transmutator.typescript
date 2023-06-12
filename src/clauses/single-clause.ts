@@ -6,7 +6,7 @@ import { Clause } from '../clause';
 
 export class SingleClause implements Clause {
 	private readonly pattern!: RegExp;
-	private readonly class!: string;
+	private readonly class?: string;
 	private readonly recursion!: boolean | Clause[];
 
 	static parse(
