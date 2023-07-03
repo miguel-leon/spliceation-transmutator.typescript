@@ -9,8 +9,8 @@ module.exports = {
 	preset: 'ts-jest',
 	testEnvironment: 'node',
 	resolver: '<rootDir>/jest.resolver.js',
-	globals: {
-		'ts-jest': tsjest
+	transform: {
+		'^.+\\.tsx?$': ['ts-jest', tsjest],
 	},
 	moduleNameMapper: pathsToModuleNameMapper(require(`./${ tsjest.tsconfig }`).compilerOptions.paths, { prefix: '<rootDir>/' })
 };
