@@ -1,5 +1,5 @@
 export interface Transmutation {
-	$schema: string;
+	$schema?: string;
 	definition: Clause[];
 	templates?: Record<string, SingleClause>;
 }

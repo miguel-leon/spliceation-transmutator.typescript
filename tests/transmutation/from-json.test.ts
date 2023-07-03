@@ -182,5 +182,32 @@ describe('Definition from JSON', () => {
 				]
 			}]);
 		});
+
+		test('with ill-defined templates', async () => {
+			expect(() => {
+				Transmutation.fromJSON({
+					definition: [{
+						extends: 'does-not-exists'
+						// no "match" attribute
+					}]
+				});
+			}).toThrow(TypeError);
+
+			expect(() => {
+				Transmutation.fromJSON({
+					definition: [{
+						extends: 'circular-a'
+					}],
+					templates: {
+						'circular-a': {
+							extends: 'circular-b'
+						},
+						'circular-b': {
+							extends: 'circular-a'
+						}
+					}
+				});
+			}).toThrow(RangeError);
+		});
 	});
 });
