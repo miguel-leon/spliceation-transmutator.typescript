@@ -1,0 +1,31 @@
+{
+  "$schema": "../../transmutation-definition/schema.json",
+  "definition": [
+    {
+      "extends": "reusable",
+      "match": "rematch"
+    },
+    {
+      "extends": "reusable",
+      "multiline": true,
+      "recursion": [
+        {
+          "extends": "reusable-recursive",
+          "class": "reusable-within"
+        }
+      ]
+    }
+  ],
+  "templates": {
+    "reusable": {
+      "class": "reusable",
+      "match": "reusable match",
+      "ignoreCase": true
+    },
+    "reusable-recursive": {
+      "extends": "reusable",
+      "match": "reusable recursive match",
+      "recursion": true
+    }
+  }
+}

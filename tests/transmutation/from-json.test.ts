@@ -160,5 +160,27 @@ describe('Definition from JSON', () => {
 				}]
 			}]);
 		});
+
+		test('with reusable templates', async () => {
+			const jsonDef = await import('./def08.json');
+
+			const def = Transmutation.fromJSON(jsonDef);
+
+			expect(def).toEqual([{
+				class: 'reusable',
+				pattern: /rematch/gi,
+				recursion: false
+			}, {
+				class: 'reusable',
+				pattern: /reusable match/gmi,
+				recursion: [
+					{
+						class: 'reusable-within',
+						pattern: /reusable recursive match/gi,
+						recursion: true
+					}
+				]
+			}]);
+		});
 	});
 });
