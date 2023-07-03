@@ -1,7 +1,7 @@
 import { regexp } from 'commonly.typescript/templates';
 import { Schema } from '../schema';
 import { Clause } from '../clause';
-import { SingleClause } from './single-clause';
+import { Catalog, SingleClause, SingleClauseAttributes } from './single-clause';
 
 
 export class MultiClause implements Clause {
@@ -13,11 +13,11 @@ export class MultiClause implements Clause {
 		capturingGroupIndex: number
 	}[];
 
-	static parse({ concurrent }: Schema.MultiClause): ConstructorParameters<typeof MultiClause>[0] {
-		return concurrent.map(SingleClause.parse);
+	static parse({ concurrent }: Schema.MultiClause, catalog?: Catalog): SingleClauseAttributes[] {
+		return concurrent.map(clause => SingleClause.parse(clause, catalog));
 	}
 
-	constructor(clauses: ConstructorParameters<typeof SingleClause>[0][]) {
+	constructor(clauses: SingleClauseAttributes[]) {
 		let nextIndex = 1;
 		let currentIndex: number;
 		this.clauses = clauses.map(
@@ -39,10 +39,10 @@ export class MultiClause implements Clause {
 		this.pattern = regexp.g
 			.i(clauses.some(({ pattern }) => pattern.ignoreCase))
 			.m(clauses.some(({ pattern }) => pattern.multiline))(
-			clauses
-				.map(({ pattern }, i) => `(${ adjustBackReferences(pattern.source, this.clauses[i].capturingGroupIndex) })`)
-				.join('|')
-		);
+				clauses
+					.map(({ pattern }, i) => `(${ adjustBackReferences(pattern.source, this.clauses[i].capturingGroupIndex) })`)
+					.join('|')
+			);
 	}
 
 	* searchThrough(content: string): Iterable<Clause.Instance> {

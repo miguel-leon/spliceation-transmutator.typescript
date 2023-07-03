@@ -1,5 +1,5 @@
 import { Schema } from './schema';
-import { MultiClause, SingleClause } from './clauses';
+import { Catalog, MultiClause, SingleClause } from './clauses';
 
 
 export interface Clause {
@@ -15,9 +15,9 @@ export namespace Clause {
 		recursion: boolean | Clause[];
 	}
 
-	export function parse(clause: Schema.Transmutation['definition'][number]): Clause {
-		return 'match' in clause ?
-			new SingleClause(SingleClause.parse(clause)) :
-			new MultiClause(MultiClause.parse(clause));
+	export function parse(clause: Schema.Clause, catalog?: Catalog): Clause {
+		return 'concurrent' in clause ?
+			new MultiClause(MultiClause.parse(clause, catalog)) :
+			new SingleClause(SingleClause.parse(clause, catalog));
 	}
 }

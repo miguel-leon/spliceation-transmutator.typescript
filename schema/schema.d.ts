@@ -1,23 +1,20 @@
-/**
- * Generated with https://transform.tools/json-schema-to-typescript
- */
-
-export type Clause = SingleClause | MultiClause
-
-/**
- * Transmutation clauses definition
- */
 export interface Transmutation {
-	$schema: string
-	definition: Clause[]
+	$schema: string;
+	definition: Clause[];
+	templates?: Record<string, SingleClause>;
 }
+
+export type Clause = SingleClause | MultiClause;
+
 export interface SingleClause {
-	class?: string
-	match: string | string[]
-	recursion?: boolean | Clause[]
-	multiline?: boolean
-	ignoreCase?: boolean
+	extends?: string;
+	match?: string | string[];
+	class?: string;
+	recursion?: boolean | Clause[];
+	multiline?: boolean;
+	ignoreCase?: boolean;
 }
+
 export interface MultiClause {
-	concurrent: SingleClause[]
+	concurrent: SingleClause[];
 }

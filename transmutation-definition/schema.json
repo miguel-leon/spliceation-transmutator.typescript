@@ -15,6 +15,12 @@
       "items": {
         "$ref": "#/definitions/clause"
       }
+    },
+    "templates": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/single-clause"
+      }
     }
   },
   "required": ["$schema", "definition"],
@@ -32,7 +38,14 @@
     "single-clause": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["match"],
+      "oneOf": [
+        {
+          "required": ["match"]
+        },
+        {
+          "required": ["extends"]
+        }
+      ],
       "properties": {
         "class": {
           "type": "string"
@@ -69,6 +82,9 @@
         },
         "ignoreCase": {
           "type": "boolean"
+        },
+        "extends": {
+          "type": "string"
         }
       }
     },
