@@ -1,7 +1,7 @@
 import { Schema } from './schema';
 import { extract } from './extract';
-import { splice, Transmuter as _Transmuter } from './splice';
-import { Clause as _Clause } from './clause';
+import { splice, Transmuter } from './splice';
+import { Clause } from './clause';
 import { Catalog } from './clauses';
 
 
@@ -14,17 +14,14 @@ export class Transmutation {
 		const extraction = extract(content, this.definition);
 		return splice(extraction, transmuter);
 	}
+
+	static fromJSON({ definition, templates }: Schema.Transmutation): Transmutation.Definition {
+		const catalog = templates && new Catalog(templates);
+		return definition.map(clause => Clause.parse(clause, catalog));
+	}
 }
 
-export namespace Transmutation {
-	export type Transmuter = _Transmuter;
-
-	export type Clause = _Clause;
-
+export declare namespace Transmutation {
+	export { Transmuter, Clause };
 	export type Definition = Clause[];
-
-	export function fromJSON({ definition, templates }: Schema.Transmutation): Definition {
-		const catalog = templates && new Catalog(templates);
-		return definition.map(clause => _Clause.parse(clause, catalog));
-	}
 }
