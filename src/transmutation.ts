@@ -1,5 +1,5 @@
 import { Schema } from './schema';
-import { extract } from './extract';
+import { extract, ExtractOptions } from './extract';
 import { splice, Transmuter } from './splice';
 import { Clause } from './clause';
 import { Catalog } from './clauses';
@@ -10,8 +10,8 @@ export class Transmutation {
 		public readonly definition: Transmutation.Definition
 	) {}
 
-	apply(content: string, transmuter: Transmutation.Transmuter): string {
-		const extraction = extract(content, this.definition);
+	apply(content: string, transmuter: Transmutation.Transmuter, options?: ExtractOptions): string {
+		const extraction = extract(content, this.definition, options);
 		return splice(extraction, transmuter);
 	}
 
