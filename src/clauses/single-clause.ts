@@ -2,6 +2,7 @@ import { regexp } from 'commonly.typescript/templates';
 import { Schema } from '../schema';
 import { ForcePick } from '../util';
 import { Clause } from '../clause';
+import { handleRegExpComments } from '../comments';
 
 
 export type SingleClauseAttributes = ForcePick<SingleClause, 'pattern' | 'class' | 'recursion'>;
@@ -26,7 +27,7 @@ export class SingleClause implements Clause {
 		return {
 			pattern: Array.isArray(match) ?
 				regexp.g.i(!!ignoreCase)`\b(?:${ match.join('|') })\b` :
-				regexp.g.i(!!ignoreCase).m(!!multiline)(match),
+				regexp.g.i(!!ignoreCase).m(!!multiline)(handleRegExpComments(match, catalog, extends_)),
 			class: class_,
 			recursion: Array.isArray(recursion) ?
 				recursion.map(clause => Clause.parse(clause, catalog)) :
