@@ -209,5 +209,33 @@ describe('Definition from JSON', () => {
 				});
 			}).toThrow(RangeError);
 		});
+
+		test('with regular expression comment syntax and special comment features', async () => {
+			const jsonDef = await import('./def09.json');
+
+			const def = Transmutation.fromJSON(jsonDef);
+
+			expect(def).toEqual([{
+				class: undefined,
+				pattern: /comments removed --><--/g,
+				recursion: false
+			}, {
+				class: 'braces',
+				pattern: /{(?:{(?:{(?:{(?:{(?:{(?:{(?:{(?:|[^}])*}|[^}])*}|[^}])*}|[^}])*}|[^}])*}|[^}])*}|[^}])*}|[^}])*}/g,
+				recursion: false
+			}, {
+				class: undefined,
+				pattern: /insert->\((?:\((?:|[^)])*\)|[^)])*\)<-/g,
+				recursion: false
+			}, {
+				class: undefined,
+				pattern: /@[\w-]+[^;{]*(?=[{;])/g,
+				recursion: [{
+					class: 'identifier',
+					pattern: /^@[\w-]+/g,
+					recursion: false
+				}]
+			}]);
+		});
 	});
 });

@@ -1,0 +1,36 @@
+{
+  "$schema": "../../transmutation-definition/schema.json",
+  "definition": [
+    {
+      "match": "comments removed -->(?#)(?#whatever)<--"
+    },
+    {
+      "class": "braces",
+      "match": "{(?:(?#{8})|[^}])*}"
+    },
+    {
+      "match": "insert->(?#parenthesis)<-"
+    },
+    {
+      "match": "(?#at-rule)[^;{]*(?=[{;])",
+      "recursion": [
+        {
+          "extends": "identifier"
+        }
+      ]
+    }
+  ],
+  "templates": {
+    "parenthesis": {
+      "match": "\\((?:(?#{2})|[^)])*\\)"
+    },
+    "at-rule": {
+      "class": "identifier",
+      "match": "@[\\w-]+"
+    },
+    "identifier": {
+      "extends": "at-rule",
+      "match": "^(?#)"
+    }
+  }
+}
