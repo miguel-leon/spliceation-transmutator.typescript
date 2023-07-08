@@ -235,6 +235,10 @@ describe('Definition from JSON', () => {
 					pattern: /^@[\w-]+/g,
 					recursion: false
 				}]
+			}, {
+				class: undefined,
+				pattern: /is up<is up<><is up<><>>><is up<is up<><>><>>/g,
+				recursion: false
 			}]);
 		});
 	});

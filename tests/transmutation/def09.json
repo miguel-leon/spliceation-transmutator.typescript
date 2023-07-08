@@ -18,6 +18,9 @@
           "extends": "identifier"
         }
       ]
+    },
+    {
+      "match": "(?#what)<(?#{2})><(?#{2})>"
     }
   ],
   "templates": {
@@ -31,6 +34,9 @@
     "identifier": {
       "extends": "at-rule",
       "match": "^(?#)"
+    },
+    "what": {
+      "match": "is up"
     }
   }
 }
