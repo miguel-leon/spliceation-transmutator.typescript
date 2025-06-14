@@ -10,7 +10,7 @@ export namespace Clause {
 	export interface Instance {
 		match: string;
 		index: number;
-		class?: string;
+		class?: string | undefined;
 		multiline: boolean;
 		recursion: boolean | Clause[];
 	}

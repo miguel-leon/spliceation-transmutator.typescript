@@ -2,7 +2,6 @@ import { Extraction } from '@src/extract';
 import { splice, Transmuter } from '@src/splice';
 
 describe('Splice function', () => {
-
 	describe('reconstitutes a string while transmuting extracted segments', () => {
 		const transmuter: Transmuter =
 			(_class: string, content: string) =>

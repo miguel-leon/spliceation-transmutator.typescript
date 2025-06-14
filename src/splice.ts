@@ -20,7 +20,7 @@ export function splice(
 	}
 
 	function transmute(extraction: Extraction) {
-		const content = extraction.segments.join('');
+		const content = (extraction.segments as string[]).join(''); // why the use of a type assertion?
 		return extraction.class ? transmuter(extraction.class, content) : content;
 	}
 }

@@ -6,13 +6,13 @@ type Segments = (string | Extraction)[];
 
 export interface Extraction {
 	segments: Segments;
-	class?: string;
+	class: string | undefined;
 }
 
 export type ExtractOptions = Partial<{
 	splitOnLineBreaks: boolean;
 	rootClass: string;
-}>
+}>;
 
 export function extract(
 	content: string,
@@ -38,7 +38,7 @@ export function extract(
 		function* segmentation(): Generator<Segments[number]> {
 			let prev = 0;
 			for (const { match, index, class: class_, multiline, recursion } of clause.searchThrough(segment)) {
-				if (prev < index!) yield segment.substring(prev, index);
+				if (prev < index) yield segment.substring(prev, index);
 
 				const segments: Segments =
 					recursion ?
@@ -58,17 +58,17 @@ export function extract(
 						const splits = (segments[i] as string).split(/((?:\r?\n)+)/);
 						if (splits.length <= 1) continue;
 
-						yield wrap([...segments.slice(last, i), ...[splits[0]].filter(Boolean)]);
+						yield wrap([...segments.slice(last, i), ...[splits[0]!].filter(Boolean)]);
 
 						let j = 1;
 						const n = splits.length - 2;
 						while (j < n) {
-							yield splits[j++];
-							yield wrap([splits[j++]]);
+							yield splits[j++]!;
+							yield wrap([splits[j++]!]);
 						}
-						yield splits[j++];
+						yield splits[j++]!;
 						if (splits[j]) {
-							segments[i] = splits[j];
+							segments[i] = splits[j]!;
 							last = i;
 						} else {
 							last = i + 1;
@@ -79,7 +79,7 @@ export function extract(
 					yield wrap(segments.slice(last));
 				}
 
-				prev = index! + match.length;
+				prev = index + match.length;
 
 				function wrap(segments: Segments) {
 					return {

@@ -3,7 +3,6 @@ import { SingleClause } from '@src/clauses';
 
 
 describe('Transmutation class', () => {
-
 	test('applies transmutation', () => {
 		const transmutation = new Transmutation(
 			[

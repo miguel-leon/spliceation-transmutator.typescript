@@ -2,9 +2,7 @@ import { Transmutation } from '@src/transmutation';
 
 
 describe('Definition from JSON', () => {
-
 	describe('parses a JSON import', () => {
-
 		test('with match as string regex', async () => {
 			const jsonDef = await import('./def01.json');
 
@@ -183,7 +181,7 @@ describe('Definition from JSON', () => {
 			}]);
 		});
 
-		test('with ill-defined templates', async () => {
+		test('with ill-defined templates', () => {
 			expect(() => {
 				Transmutation.fromJSON({
 					definition: [{

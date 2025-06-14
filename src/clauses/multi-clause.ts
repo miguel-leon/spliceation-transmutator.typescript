@@ -7,10 +7,10 @@ import { Catalog, SingleClause, SingleClauseAttributes } from './single-clause';
 export class MultiClause implements Clause {
 	private readonly pattern: RegExp;
 	private readonly clauses: {
-		class?: string,
-		multiline: boolean,
-		recursion: boolean | Clause[],
-		capturingGroupIndex: number
+		class: string | undefined;
+		multiline: boolean;
+		recursion: boolean | Clause[];
+		capturingGroupIndex: number;
 	}[];
 
 	static parse({ concurrent }: Schema.MultiClause, catalog?: Catalog): SingleClauseAttributes[] {
@@ -36,20 +36,20 @@ export class MultiClause implements Clause {
 				)
 			})
 		);
-		this.pattern = regexp.g
-			.i(clauses.some(({ pattern }) => pattern.ignoreCase))
-			.m(clauses.some(({ pattern }) => pattern.multiline))(
-				clauses
-					.map(({ pattern }, i) => `(${ adjustBackReferences(pattern.source, this.clauses[i].capturingGroupIndex) })`)
-					.join('|')
-			);
+		this.pattern = regexp.g!
+			.i!(clauses.some(({ pattern }) => pattern.ignoreCase))
+			.m!(clauses.some(({ pattern }) => pattern.multiline))(
+			clauses
+				.map(({ pattern }, i) => `(${ adjustBackReferences(pattern.source, this.clauses[i]!.capturingGroupIndex) })`)
+				.join('|')
+		);
 	}
 
 	* searchThrough(content: string): Iterable<Clause.Instance> {
 		for (const result of content.matchAll(this.pattern)) {
 			yield {
 				match: result[0],
-				index: result.index!,
+				index: result.index,
 				...this.matchingClause(result)
 			};
 		}

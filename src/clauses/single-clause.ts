@@ -9,7 +9,7 @@ export type SingleClauseAttributes = ForcePick<SingleClause, 'pattern' | 'class'
 
 export class SingleClause implements Clause {
 	private readonly pattern!: RegExp;
-	private readonly class?: string;
+	private readonly class: string | undefined;
 	private readonly recursion!: boolean | Clause[];
 
 	static parse(
@@ -26,8 +26,8 @@ export class SingleClause implements Clause {
 
 		return {
 			pattern: Array.isArray(match) ?
-				regexp.g.i(!!ignoreCase)`\b(?:${ match.join('|') })\b` :
-				regexp.g.i(!!ignoreCase).m(!!multiline)(handleRegExpComments(match, catalog, extends_)),
+				regexp.g!.i!(!!ignoreCase)`\b(?:${ match.join('|') })\b` :
+				regexp.g!.i!(!!ignoreCase).m!(!!multiline)(handleRegExpComments(match, catalog, extends_)),
 			class: class_,
 			recursion: Array.isArray(recursion) ?
 				recursion.map(clause => Clause.parse(clause, catalog)) :
@@ -43,7 +43,7 @@ export class SingleClause implements Clause {
 		for (const { 0: match, index } of content.matchAll(this.pattern)) {
 			yield {
 				match,
-				index: index!,
+				index,
 				class: this.class,
 				multiline: this.pattern.multiline,
 				recursion: this.recursion

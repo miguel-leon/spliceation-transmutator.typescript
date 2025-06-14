@@ -4,7 +4,6 @@ import { MultiClause, SingleClause } from '@src/clauses';
 
 
 describe('Extract function', () => {
-
 	test('creates a Extraction from a Definition with single clause', () => {
 		const definition: Transmutation.Definition = [
 			new SingleClause({
