@@ -2,12 +2,15 @@
   "name": "spliceation-transmutator.typescript",
   "version": "0.1.0",
   "description": "Well typed, string transmutation via splicing, driven by definitions of regular expressions, priority match and recursive clauses",
+  "type": "module",
   "scripts": {
     "dev": "tsc --watch",
     "lint": "eslint .",
     "test": "jest",
-    "build": "tsc && tsc -p tsconfig-cjs.json",
-    "postbuild": "cp package.json , readme.md , transmutation-definition/* , schema/ ./dist -Recurse -Force"
+    "build": "tsc && tsc-esm-patch",
+    "postbuild": "pnpm run build-cjs && pnpm run copy-files",
+    "build-cjs": "tsc -p tsconfig-cjs.json",
+    "copy-files": "cp package.json , readme.md , transmutation-definition/* , schema/ ./dist -Recurse -Force"
   },
   "dependencies": {
     "commonly.typescript": "^0.3.0"
@@ -19,6 +22,7 @@
     "eslint": "^9.29.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.4.0",
+    "tsc-esm-patch": "^1.0.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.34.0"
   },
