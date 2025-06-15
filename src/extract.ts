@@ -6,7 +6,7 @@ type Segments = (string | Extraction)[];
 
 export interface Extraction {
 	segments: Segments;
-	class: string | undefined;
+	class?: string | undefined;
 }
 
 export type ExtractOptions = Partial<{
