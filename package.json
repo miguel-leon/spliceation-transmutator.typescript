@@ -9,7 +9,7 @@
     "test": "jest",
     "build": "tsc && tsc-esm-patch",
     "postbuild": "pnpm run build-cjs && pnpm run copy-files",
-    "build-cjs": "tsc -p tsconfig-cjs.json",
+    "build-cjs": "tsc -p tsconfig-cjs.json && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
     "copy-files": "cp package.json , readme.md , transmutation-definition/* , schema/ ./dist -Recurse -Force"
   },
   "dependencies": {
